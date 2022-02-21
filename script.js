@@ -28,7 +28,6 @@ async function fetchRandom() {
 }
 
 fetchRandom().then((res) => {
-  console.log("res", res.data[0]);
   if (res.meta.status === 200) {
     const {
       images: {
