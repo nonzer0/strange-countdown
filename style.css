@@ -29,6 +29,7 @@ h1 {
   align-items: center;
   text-align: center;
   font-weight: bolder;
+  word-break: keep-all;
 }
 
 .gif {
