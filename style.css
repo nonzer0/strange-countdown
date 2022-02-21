@@ -40,6 +40,14 @@ hr {
   width: 50%;
 }
 
+#countdown {
+  margin-right: 4px;
+}
+
+#rando {
+  margin: 0 1px 0 1px;
+}
+
 .postscript {
   color: #5d5c5b;
   font-size: 0.75rem;
