@@ -15,25 +15,43 @@ const x = setInterval(() => {
   ).innerHTML = `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
 }, 1000);
 
-async function fetchRandom() {
-  return window
-    .fetch(
-      `https://api.giphy.com/v1/gifs/search?api_key=${giphyApiKey}&q=doctor-strange&rating=pg13`
-    )
-    .then((response) => {
-      console.log("response", response["url"]);
-      image = response["url"];
-      return response.json();
-    });
+function searchTerms(...terms) {
+  return terms.reduce((concated, term) => {
+    return `${concated}-${term}`;
+  }, "");
 }
 
-fetchRandom().then((res) => {
-  if (res.meta.status === 200) {
-    const {
-      images: {
-        fixed_height: { url },
-      },
-    } = res.data[Math.floor(Math.random() * 20)];
-    document.getElementById("rando").innerHTML = `<img src=${url} alt='gif' />`;
-  }
-});
+let scarletWitch = ["scarlet", "witch"];
+let drstrange = ["doctor", "strange"];
+
+async function fetchRandom(terms) {
+  return window
+    .fetch(
+      `https://api.giphy.com/v1/gifs/search?api_key=${giphyApiKey}&q=${searchTerms(
+        terms
+      )}&rating=pg13`
+    )
+    .then((response) =>
+      response.ok ? response.json() : Promise.reject(response)
+    );
+}
+
+const setHtmlById = (elId, url) =>
+  (document.getElementById(elId).innerHTML = imgMarkup(url));
+
+const imgMarkup = (url) => `<img src=${url} alt='gif' />`;
+
+fetchRandom(scarletWitch)
+  .then((res) => {
+    if (res.meta.status === 200) {
+      const {
+        images: {
+          fixed_height: { url },
+        },
+      } = res.data[Math.floor(Math.random() * 20)];
+      document.getElementById(
+        "rando"
+      ).innerHTML = `<img src=${url} alt='gif' />`;
+    }
+  })
+  .catch((err) => console.warn("Error", err));
